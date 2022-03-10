@@ -23,6 +23,10 @@ config/icon="res://icon.png"
 window/size/width=720
 window/size/height=540
 
+[global]
+
+fps=false
+
 [input]
 
 move_left={
@@ -62,5 +66,4 @@ jump={
 
 [rendering]
 
-quality/driver/driver_name="GLES2"
 quality/filters/msaa=3

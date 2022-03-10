@@ -11,7 +11,10 @@ func _physics_process(delta):
 	
 #Вызываем с главной сцены 
 func initialize(start_position,player_position):
+	print(start_position)
+	
 	translation = start_position
+	
 	#Моб смотрит по направлению игрока
 	look_at(player_position,Vector3.UP)
 	#Рандомный поворот
