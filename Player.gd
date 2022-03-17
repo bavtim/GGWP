@@ -1,5 +1,10 @@
 extends KinematicBody
-#Перемещение в единицу времени
+#Сигнал удара по игроку
+signal hit
+#Импульс прыжка
+export var jump_impulse = 20
+#Импульс отскока
+export var bounce_impulse = 16
 export var speed = 14
 #Ускорение падения
 export var fall_acceleration = 75
@@ -21,8 +26,26 @@ func _physics_process(delta):
 	if direction!=Vector3.ZERO:
 		direction = direction.normalized()
 		$Pivot.look_at(translation+direction,Vector3.UP)
+	#Прыжок
+	if is_on_floor() and Input.is_action_just_pressed("jump"):
+		velocity.y+=jump_impulse
+	for index in range(get_slide_count()):
+		var collision = get_slide_collision(index)
+		if collision.collider.is_in_group("mob"):
+			var  mob = collision.collider
+			if Vector3.UP.dot(collision.normal)>0.1:
+				mob.squash()
+				velocity.y = bounce_impulse
 	#Применение скорости
 	velocity.x = direction.x*speed
 	velocity.z = direction.z*speed
 	velocity.y -= fall_acceleration *delta
 	velocity = move_and_slide(velocity,Vector3.UP)
+
+func die():
+	emit_signal("hit")
+	queue_free()
+
+func _on_MobDetector_body_entered(body):
+	print(body.get_name())
+	die()

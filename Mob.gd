@@ -1,4 +1,6 @@
 extends KinematicBody
+#Сигнал о смерти моба
+signal squashed
 #Минимальная скорость
 export var min_speed = 10
 #Максимальная скорость
@@ -11,7 +13,6 @@ func _physics_process(delta):
 	
 #Вызываем с главной сцены 
 func initialize(start_position,player_position):
-	print(start_position)
 	
 	translation = start_position
 	
@@ -28,6 +29,9 @@ func initialize(start_position,player_position):
 	#Перемещение по взгляду
 	velocity = velocity.rotated(Vector3.UP,rotation.y)
 	
+func squash():
+	emit_signal("squashed")
+	queue_free()
 #При пропадании с экрана моба - он удаляется
 func _on_VisibilityNotifier_screen_exited():
 	queue_free()
